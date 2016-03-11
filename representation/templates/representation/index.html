@@ -1,0 +1,35 @@
+{% extends 'representation/base.html' %}
+
+{% block title %}
+Главная страница
+{% endblock %}
+
+{% block content %}
+        <div class="col-md-9" style="border: 1px solid red">
+            <div class="row">
+                <div style="border: 1px solid red">{{ user_profile.name }} {{ user_profile.first_name }}(это вы)</div>
+                <div class="col-md-4">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzBEOEZEQiIvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjEwMCIgeT0iMTAwIiBzdHlsZT0iZmlsbDojZmZmO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjEzcHg7Zm9udC1mYW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+MjAweDIwMDwvdGV4dD48L3N2Zz4=" alt="" class="img-rounded">
+                </div>
+                <div class="col-md-8" style="border: 1px solid green">
+                    <div>
+                        <h4>{{ user_profile.first_name }} {{ user_profile.name }}</h4>
+                        <p>Статус</p>
+                    </div>
+                    <div>
+                        <div class="">
+                            <div class="">День рождения: {{ user_profile.birthday }}</div>
+                            <div>Родной город: {{ user_profile.home_town }}</div>
+                            <div>Место учёбы: КФУ (бывш. КГУ им. Ульянова-Ленина) '18 </div>
+                            <div>Языки:
+                                {% for lang in user_profile.languages.all %}
+                                    {{ lang.name }}
+                                {% endfor %}
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}

@@ -1,0 +1,131 @@
+<html>
+<head>
+	<title>{% block title %} {% endblock %}</title>
+	<link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.5/cerulean/bootstrap.min.css" rel="stylesheet">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+</head>
+<body>
+	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="">Go Travel</a>
+
+        </div>
+      <div class="collapse navbar-collapse">
+          {% if request.user.is_authenticated %}
+            <p class="navbar-text navbar-right"><a href="{% url 'representation:auth:logout' %}" class="navbar-link">Выйти</a></p>
+          {% endif %}
+      </div>
+      </div>
+    </div>
+
+
+    <div class="container">
+        <div class="col-md-12">
+        {% if not request.user.is_authenticated %}
+                <div class="col-md-3">
+                    <form role="form" action="{% url 'representation:auth:login' %}" method="post">
+                        {% csrf_token %}
+                      <div class="form-group">
+                        <label>Email</label>
+                        <input type="text" class="form-control" placeholder="Enter email" name="email">
+                      </div>
+                      <div class="form-group">
+                        <label>Пароль</label>
+                        <input type="password" class="form-control" placeholder="Password" name="password">
+                      </div>
+                      <button type="submit" class="btn btn-primary">Войти</button>
+                    </form>
+                </div>
+
+                <div class="col-md-8 border">
+                <div class="col-md-12">
+                    <p>GoTravel - ...</p>
+                    <hr>
+                </div>
+                <div class="col-md-4 col-md-offset-4 center">
+                    <form role="form" method="post" action="{% url 'representation:auth:register' %}">
+                        {% csrf_token %}
+                      <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" class="form-control" placeholder="Enter email" name="email">
+                      </div>
+                      <div class="form-group">
+                        <label>Пароль</label>
+                        <input type="password" class="form-control" placeholder="Password" name="password">
+                      </div>
+                      <button type="submit" class="btn btn-primary">Зарегестрироваться</button>
+                    </form>
+                </div>
+                </div>
+        {% else %}
+                <div class="col-md-3">
+                    <ul class="nav nav-pills nav-stacked">
+                        <li>
+                            <ul class="nav nav-pills" role="tablist">
+                                <li role="presentation" style="width:75%;"><a href="{% url 'representation:index' %}">Моя страница</a></li>
+                                <li role="presentation" style="width:24%;"><a href="{% url 'representation:profile:base' %}">ред.</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span class="badge pull-right">23</span>
+                                Мои друзья
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span class="badge pull-right">3</span>
+                                Мои отзывы
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                Мои фотографии
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                Мои видео
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span class="badge pull-right">99999</span>
+                                Мои сообщения
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                Мои новости
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                Мои баллы
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">Мои настройки</a>
+                        </li>
+                    </ul>
+                </div>
+                {% block content %}
+                {% endblock %}
+        {% endif %}
+        </div>
+    </div>
+</body>
+	<style type="text/css">
+		body {
+			padding-top: 75px;
+		}
+        .logout{
+            margin-top: 10px;
+        }
+		.center{
+			text-align: center;
+		}
+	</style>
+	<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+</html>
