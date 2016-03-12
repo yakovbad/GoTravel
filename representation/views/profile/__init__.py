@@ -10,7 +10,8 @@ def url_view():
     urlpatterns = [
         url(r'^base/$', base, name='base'),
         url(r'^contact/$', contact, name='contact'),
-        url(r'^userinfo/$', user_personal_info, name='userinfo')
+        url(r'^userinfo/$', user_personal_info, name='userinfo'),
+        url(r'^photo/$', user_photo_upload, name='photo'),
     ]
 
     return include(urlpatterns, namespace='profile')
@@ -45,4 +46,11 @@ def user_personal_info(request):
     context = dict()
     if request.method == 'GET':
         context['form'] = AddOrEditPersonalInfo(instance=UserProfile.objects.get_or_create(user=request.user)[0])
+    return render(request, 'representation/profile_contact.html', context)
+
+
+def user_photo_upload(request):
+    context = dict()
+    if request.method == 'GET':
+        context['form'] = AddOrEditUserAvatarPhoto(instance=UserProfile.objects.get_or_create(user=request.user)[0])
     return render(request, 'representation/profile_contact.html', context)

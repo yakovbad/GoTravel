@@ -1,4 +1,6 @@
 # coding: utf-8
+import os
+import uuid
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -9,7 +11,10 @@ genders = (
 
 
 def get_path_user_photo(instance, filename):
-    return "users/avatar/%s/%s" % (str(instance.user.id), filename)
+    ext = filename.split('.')[-1]
+    path = os.path.join("users", "avatar")
+    filename = "%s.%s" % (uuid.uuid4(), ext)
+    return os.path.join(path, str(instance.user.id), filename)
 
 
 class UserProfile(models.Model):
