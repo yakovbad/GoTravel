@@ -1,6 +1,6 @@
 # coding: utf-8
 from django.forms import ModelForm
-from representation.models import UserProfile, Contact
+from representation.models import UserProfile
 
 
 class AddOrEditProfile(ModelForm):
@@ -18,10 +18,29 @@ class AddOrEditProfile(ModelForm):
 
 class AddOrEditContact(ModelForm):
     class Meta:
-        model = Contact
+        model = UserProfile
         fields = [
             'country',
             'city',
             'e_mail',
             'mobile_phone',
         ]
+
+
+class AddOrEditPersonalInfo(ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = [
+            'activity',
+            'interests',
+            'favorite_music',
+            'favorite_films',
+            'favorite_books',
+            'favorite_games',
+        ]
+
+
+class AddOrEditUserAvatarPhoto(ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ['user_photo_avatar']

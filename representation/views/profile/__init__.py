@@ -1,7 +1,7 @@
 # coding: utf-8
 from django.shortcuts import render
-from .forms import AddOrEditProfile, AddOrEditContact
-from representation.models import UserProfile, Contact
+from .forms import AddOrEditProfile, AddOrEditContact, AddOrEditPersonalInfo, AddOrEditUserAvatarPhoto
+from representation.models import UserProfile
 
 
 def url_view():
@@ -10,6 +10,7 @@ def url_view():
     urlpatterns = [
         url(r'^base/$', base, name='base'),
         url(r'^contact/$', contact, name='contact'),
+        url(r'^userinfo/$', user_personal_info, name='userinfo')
     ]
 
     return include(urlpatterns, namespace='profile')
@@ -35,6 +36,13 @@ def base(request):
 def contact(request):
     context = dict()
     if request.method == 'GET':
-        context['form'] = AddOrEditContact(instance=Contact.objects.get_or_create(user=request.user)[0])
+        context['form'] = AddOrEditContact(instance=UserProfile.objects.get_or_create(user=request.user)[0])
 
-    return render(request, 'representation/profile_base.html', context)
+    return render(request, 'representation/profile_contact.html', context)
+
+
+def user_personal_info(request):
+    context = dict()
+    if request.method == 'GET':
+        context['form'] = AddOrEditPersonalInfo(instance=UserProfile.objects.get_or_create(user=request.user)[0])
+    return render(request, 'representation/profile_contact.html', context)

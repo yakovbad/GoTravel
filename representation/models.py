@@ -8,6 +8,10 @@ genders = (
 )
 
 
+def get_path_user_photo(instance, filename):
+    return "users/avatar/%s/%s" % (str(instance.user.id), filename)
+
+
 class UserProfile(models.Model):
     user = models.ForeignKey(User)
     name = models.CharField(max_length=50, blank=True)
@@ -16,6 +20,22 @@ class UserProfile(models.Model):
     birthday = models.DateField(null=True, blank=True)
     home_town = models.CharField(max_length=50, blank=True)
     languages = models.ManyToManyField('Language', blank=True)
+
+    country = models.ForeignKey('Country', null=True, blank=True)
+    city = models.ForeignKey('City', null=True, blank=True)
+    e_mail = models.EmailField(null=True, blank=True)
+    mobile_phone = models.CharField(max_length=20, blank=True)
+    additional_phone = models.CharField(max_length=100, blank=True)
+    personal_site = models.CharField(max_length=255, blank=True)
+
+    activity = models.TextField(blank=True)
+    interests = models.TextField(blank=True)
+    favorite_music = models.TextField(blank=True)
+    favorite_films = models.TextField(blank=True)
+    favorite_books = models.TextField(blank=True)
+    favorite_games = models.TextField(blank=True)
+
+    user_photo_avatar = models.ImageField(blank=True, upload_to=get_path_user_photo)
 
     def __unicode__(self):
         return "%s: %s %s" % (self.user.username, self.name, self.first_name)
@@ -41,23 +61,3 @@ class City(models.Model):
 
     def __unicode__(self):
         return self.name
-
-
-class Contact(models.Model):
-    user = models.ForeignKey(User)
-    country = models.ForeignKey('Country', null=True)
-    city = models.ForeignKey('City', null=True)
-    e_mail = models.EmailField(null=True)
-    mobile_phone = models.CharField(max_length=20, blank=True)
-    additional_phone = models.CharField(max_length=100, blank=True)
-    personal_site = models.CharField(max_length=255, blank=True)
-
-
-class PersonalInformation(models.Model):
-    user = models.ForeignKey(User)
-    activity = models.TextField(blank=True)
-    interests = models.TextField(blank=True)
-    favorite_music = models.TextField(blank=True)
-    favorite_films = models.TextField(blank=True)
-    favorite_books = models.TextField(blank=True)
-    favorite_games = models.TextField(blank=True)

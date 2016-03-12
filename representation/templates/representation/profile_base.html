@@ -10,7 +10,7 @@
             <ul class="nav nav-tabs">
                 <li><a href="{% url 'representation:profile:base' %}">Основное</a></li>
                 <li><a href="{% url 'representation:profile:contact' %}">Контакты</a></li>
-                <li><a href="#tab3">Интересы</a></li>
+                <li><a href="{% url 'representation:profile:userinfo' %}">Интересы</a></li>
             </ul>
             <div class="col-md-9">
             {% block content_local %}
