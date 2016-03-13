@@ -63,7 +63,7 @@
                     <ul class="nav nav-pills nav-stacked">
                         <li>
                             <ul class="nav nav-pills" role="tablist">
-                                <li role="presentation" style="width:75%;"><a href="{% url 'representation:index' %}">Моя страница</a></li>
+                                <li role="presentation" style="width:75%;"><a href="{% url 'representation:userPage' request.user.id %}">Моя страница</a></li>
                                 <li role="presentation" style="width:24%;"><a href="{% url 'representation:profile:base' %}">ред.</a></li>
                             </ul>
                         </li>
