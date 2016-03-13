@@ -1,5 +1,7 @@
 # coding: utf-8
+from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import render
+from django.views.generic import UpdateView
 from .forms import AddOrEditProfile, AddOrEditContact, AddOrEditPersonalInfo, AddOrEditUserAvatarPhoto
 from representation.models import UserProfile
 
@@ -8,49 +10,41 @@ def url_view():
     from django.conf.urls import url, include
 
     urlpatterns = [
-        url(r'^base/$', base, name='base'),
-        url(r'^contact/$', contact, name='contact'),
-        url(r'^userinfo/$', user_personal_info, name='userinfo'),
-        url(r'^photo/$', user_photo_upload, name='photo'),
+        url(r'^base/$', ProfileFormView.as_view(), name='base'),
+        url(r'^contact/$', ContactFormView.as_view(), name='contact'),
+        url(r'^personal_info/$', UserPersonalFormView.as_view(), name='userinfo'),
+        url(r'^photo/$', UserPhotoFormView.as_view(), name='photo'),
     ]
 
     return include(urlpatterns, namespace='profile')
 
 
-def base(request):
-    context = dict()
-    if request.method == 'GET':
-        context['form'] = AddOrEditProfile(instance=UserProfile.objects.get_or_create(user=request.user)[0])
-    elif request.method == 'POST':
-        f = AddOrEditProfile(request.POST, instance=UserProfile.objects.get(user=request.user))
-        if f.is_valid():
-            _instance = f.save(commit=False)
-            _instance.user = request.user
-            _instance.save()
-            f.save_m2m()
-            context['form'] = AddOrEditProfile(instance=_instance)
-        else:
-            context['form'] = f
-    return render(request, 'representation/profile_base.html', context)
+class BaseProfileFormView(UpdateView):
+    model = UserProfile
+    template_name = 'representation/profile_base.html'
+
+    def get_object(self, queryset=None):
+        return self.model.objects.get_or_create(user=self.request.user)[0]
 
 
-def contact(request):
-    context = dict()
-    if request.method == 'GET':
-        context['form'] = AddOrEditContact(instance=UserProfile.objects.get_or_create(user=request.user)[0])
-
-    return render(request, 'representation/profile_contact.html', context)
+class ProfileFormView(BaseProfileFormView):
+    form_class = AddOrEditProfile
+    success_url = reverse_lazy('representation:profile:base')
 
 
-def user_personal_info(request):
-    context = dict()
-    if request.method == 'GET':
-        context['form'] = AddOrEditPersonalInfo(instance=UserProfile.objects.get_or_create(user=request.user)[0])
-    return render(request, 'representation/profile_contact.html', context)
+class ContactFormView(BaseProfileFormView):
+    form_class = AddOrEditContact
+    template_name = 'representation/profile_contact.html'
+    success_url = reverse_lazy('representation:profile:contact')
 
 
-def user_photo_upload(request):
-    context = dict()
-    if request.method == 'GET':
-        context['form'] = AddOrEditUserAvatarPhoto(instance=UserProfile.objects.get_or_create(user=request.user)[0])
-    return render(request, 'representation/profile_contact.html', context)
+class UserPersonalFormView(BaseProfileFormView):
+    form_class = AddOrEditPersonalInfo
+    success_url = reverse_lazy('representation:profile:userinfo')
+
+
+class UserPhotoFormView(BaseProfileFormView):
+    form_class = AddOrEditUserAvatarPhoto
+    template_name = 'representation/profile_photo.html'
+    success_url = reverse_lazy('representation:profile:photo')
+
