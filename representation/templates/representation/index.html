@@ -9,7 +9,14 @@
             <div class="row">
                 <div style="border: 1px solid red">{{ user_profile.name }} {{ user_profile.first_name }}(это вы)</div>
                 <div class="col-md-4">
-                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzBEOEZEQiIvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjEwMCIgeT0iMTAwIiBzdHlsZT0iZmlsbDojZmZmO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjEzcHg7Zm9udC1mYW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+MjAweDIwMDwvdGV4dD48L3N2Zz4=" alt="" class="img-rounded">
+
+                    <img src="
+                    {%  if user_profile.user_photo_avatar %}
+                        {{ user_profile.user_photo_avatar.url }}
+                    {% else %}
+                        /media/users/avatar/default/default.jpg
+                    {% endif %}
+                    " alt="" class="img-rounded" style="width: 200px; height: 200px;">
                 </div>
                 <div class="col-md-8" style="border: 1px solid green">
                     <div>
@@ -20,7 +27,6 @@
                         <div class="">
                             <div class="">День рождения: {{ user_profile.birthday }}</div>
                             <div>Родной город: {{ user_profile.home_town }}</div>
-                            <div>Место учёбы: КФУ (бывш. КГУ им. Ульянова-Ленина) '18 </div>
                             <div>Языки:
                                 {% for lang in user_profile.languages.all %}
                                     {{ lang.name }}

@@ -1,0 +1,27 @@
+{% extends 'representation/base.html' %}
+
+{% block title %}
+Редактирование моей страницы
+{% endblock %}
+
+{% block content %}
+    <div class="col-md-9">
+        <div class="jumbotron" style="padding: 0">
+            <ul class="nav nav-tabs">
+                <li><a href="{% url 'representation:profile:base' %}">Основное</a></li>
+                <li><a href="{% url 'representation:profile:contact' %}">Контакты</a></li>
+                <li><a href="{% url 'representation:profile:userinfo' %}">Интересы</a></li>
+                <li><a href="{% url 'representation:profile:photo' %}">Фотография</a></li>
+            </ul>
+            <div class="col-md-9">
+            {% block content_local %}
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <input type="submit" class="button" value="Сохранить">
+                </form>
+            {% endblock %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

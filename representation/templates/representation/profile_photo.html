@@ -1,0 +1,9 @@
+{% extends 'representation/profile_base.html' %}
+
+{% block content_local %}
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" class="button" value="Сохранить">
+    </form>
+{% endblock %}
