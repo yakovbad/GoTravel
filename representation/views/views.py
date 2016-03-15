@@ -13,7 +13,10 @@ def index(request):
 
 def user_page(request, user_id):
     context = dict()
-    if request.user.is_authenticated():
+    user_id = int(user_id)
+    if request.user.id == user_id:
+        context['user_profile'] = UserProfile.objects.get_or_create(user=request.user)[0]
+    elif request.user.is_authenticated():
         try:
             context['user_profile'] = UserProfile.objects.get(user__id=user_id)
         except ObjectDoesNotExist:
