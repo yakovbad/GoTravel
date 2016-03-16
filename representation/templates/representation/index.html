@@ -7,7 +7,7 @@
 {% block content %}
         <div class="col-md-9" style="border: 1px solid red">
             <div class="row">
-                <div style="border: 1px solid red">{{ user_profile.name }} {{ user_profile.first_name }}(это вы)</div>
+                <div style="border: 1px solid red">{{ user_profile.name }} {{ user_profile.first_name }}</div>
                 <div class="col-md-4">
 
                     <img src="
@@ -17,6 +17,13 @@
                         /media/users/avatar/default/default.jpg
                     {% endif %}
                     " alt="" class="img-rounded" style="width: 200px; height: 200px;">
+                    {% if user_profile.user != request.user and not user_friend and user_profile not in request.user.friends.all%}
+                        <form method="post" action="{% url 'representation:friend:requestFriendAdd'%}">
+                            {% csrf_token %}
+                            <input type="hidden" value="{{ user_profile.user.id }}" name="to_user">
+                            <input type="submit" value="Добавить в друзья">
+                        </form>
+                    {% endif %}
                 </div>
                 <div class="col-md-8" style="border: 1px solid green">
                     <div>

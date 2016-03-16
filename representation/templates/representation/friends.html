@@ -1,0 +1,59 @@
+{% extends 'representation/base.html' %}
+
+{% block title %}
+Друзья {{ request.user.user_profile.get.get_full_name }}
+{% endblock %}
+
+{% block content %}
+    <div class="col-md-9">
+        <div class="row">
+            <div class="col-md-12">
+                <h3>Заявка</h3>
+                {% for request in request_friend %}
+                    <form action="{% url 'representation:friend:responseRequestFriend' %}" method="post">
+                        {% csrf_token %}
+                        <p>{{ request }}</p>
+                        <input type="submit" name="accept" value="Добавить">
+                        <input type="submit" name="deny" value="Отклонить">
+                        <input type="hidden" name="request_id" value="{{ request.id }}">
+                    </form>
+                    <br>
+                {% endfor %}
+
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <h3>Friends</h3>
+                <ul>
+                    {% for friend in request.user.friends.all %}
+                        <li>
+                            <a href="{% url 'representation:userPage' friend.user.id %}">{{ friend.get_full_name }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <h3>Followers</h3>
+                <ul>
+                    {% for follower in request.user.follower.all %}
+                        <li>
+                            <a href="{% url 'representation:userPage' follower.user.id %}">{{ follower.get_full_name }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <h3>Followings</h3>
+                <ul>
+                    {% for following in request.user.following.all %}
+                        <li>
+                            <a href="{% url 'representation:userPage' following.user.id %}">{{ following.get_full_name }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}
