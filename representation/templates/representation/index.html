@@ -17,11 +17,18 @@
                         /media/users/avatar/default/default.jpg
                     {% endif %}
                     " alt="" class="img-rounded" style="width: 200px; height: 200px;">
-                    {% if user_profile.user != request.user and not user_friend and user_profile not in request.user.friends.all%}
+                    {% if user_profile.user != request.user and not user_outgoing_friend_requests and user_profile not in request.user.friends.all%}
                         <form method="post" action="{% url 'representation:friend:requestFriendAdd'%}">
                             {% csrf_token %}
                             <input type="hidden" value="{{ user_profile.user.id }}" name="to_user">
                             <input type="submit" value="Добавить в друзья">
+                        </form>
+                    {% endif %}
+                    {% if user_profile in request.user.friends.all %}
+                        <form method="post" action="{% url 'representation:friend:FriendDelete'%}">
+                            {% csrf_token %}
+                            <input type="hidden" value="{{ user_profile.user.id }}" name="to_user">
+                            <input type="submit" value="Убрать из друзей">
                         </form>
                     {% endif %}
                 </div>

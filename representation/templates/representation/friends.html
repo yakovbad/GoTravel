@@ -27,9 +27,9 @@
             <div class="col-md-3">
                 <h3>Friends</h3>
                 <ul>
-                    {% for friend in request.user.friends.all %}
+                    {% for friend in user_profile.friends.all %}
                         <li>
-                            <a href="{% url 'representation:userPage' friend.user.id %}">{{ friend.get_full_name }}</a>
+                            <a href="{% url 'representation:userPage' friend.id %}">{{ friend.user_profile.get.get_full_name }}</a>
                         </li>
                     {% endfor %}
                 </ul>
@@ -37,9 +37,9 @@
             <div class="col-md-3">
                 <h3>Followers</h3>
                 <ul>
-                    {% for follower in request.user.follower.all %}
+                    {% for follower in user_profile.followers.all %}
                         <li>
-                            <a href="{% url 'representation:userPage' follower.user.id %}">{{ follower.get_full_name }}</a>
+                            <a href="{% url 'representation:userPage' follower.id %}">{{ follower.user_profile.get.get_full_name }}</a>
                         </li>
                     {% endfor %}
                 </ul>
@@ -47,9 +47,9 @@
             <div class="col-md-3">
                 <h3>Followings</h3>
                 <ul>
-                    {% for following in request.user.following.all %}
+                    {% for following in user_profile.followings.all %}
                         <li>
-                            <a href="{% url 'representation:userPage' following.user.id %}">{{ following.get_full_name }}</a>
+                            <a href="{% url 'representation:userPage' following.id %}">{{ following.user_profile.get.get_full_name }}</a>
                         </li>
                     {% endfor %}
                 </ul>

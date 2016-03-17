@@ -27,8 +27,8 @@ class UserPageView(AllPageView):
     def get_context_data(self, **kwargs):
         context = super(UserPageView, self).get_context_data(**kwargs)
         user_id = int(self.kwargs['user_id'])
-        context['user_friend'] = self.request.user.user_outgoing_friend_requests\
-            .filter(to_user__id=user_id)
+        context['user_outgoing_friend_requests'] = self.request.user.user_outgoing_friend_requests\
+            .filter(to_user__id=user_id).filter(denied=False, accepted=False)
         if self.request.user.id == user_id:
             context['user_profile'] = UserProfile.objects.get_or_create(user=self.request.user)[0]
         elif self.request.user.is_authenticated():
