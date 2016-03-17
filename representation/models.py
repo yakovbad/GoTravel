@@ -93,10 +93,10 @@ class FriendRequest(models.Model):
     def accept(self, by_user):
         if by_user == self.to_user:
             return False
-        self.to_user.friends.add(by_user.user_profile.get())
-        self.to_user.follower.remove(by_user.user_profile.get())
-        by_user.friends.add(self.to_user.user_profile.get())
-        by_user.following.remove(self.to_user.user_profile.get())
+        self.to_user.user_profile.get().friends.add(by_user)
+        self.to_user.user_profile.get().followers.remove(by_user)
+        by_user.user_profile.get().friends.add(self.to_user)
+        by_user.user_profile.get().followings.remove(self.to_user)
         self.accepted = True
         self.save()
         return True
