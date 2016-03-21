@@ -48,6 +48,6 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterUniqueTogether(
             name='friendrequest',
-            unique_together=set([('to_user', 'from_user')]),
+            unique_together=set(),
         ),
     ]

@@ -1,6 +1,5 @@
 # coding: utf-8
 from django.core.urlresolvers import reverse_lazy
-from django.shortcuts import render
 from django.views.generic import UpdateView
 from .forms import AddOrEditProfile, AddOrEditContact, AddOrEditPersonalInfo, AddOrEditUserAvatarPhoto
 from representation.models import UserProfile
@@ -25,6 +24,12 @@ class BaseProfileFormView(UpdateView):
 
     def get_object(self, queryset=None):
         return self.model.objects.get_or_create(user=self.request.user)[0]
+
+    def get_context_data(self, **kwargs):
+        context = super(BaseProfileFormView, self).get_context_data(**kwargs)
+        count = self.request.user.user_incoming_friend_requests.filter(denied=False, accepted=False).count()
+        context['request_friend_count'] = count if count > 0 else ''
+        return context
 
 
 class ProfileFormView(BaseProfileFormView):
