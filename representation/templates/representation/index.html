@@ -17,7 +17,7 @@
                         /media/users/avatar/default/default.jpg
                     {% endif %}
                     " alt="" class="img-rounded" style="width: 200px; height: 200px;">
-                    {% if user_profile.user != request.user and not user_outgoing_friend_requests and user_profile not in request.user.friends.all%}
+                    {% if user_profile.user != request.user and not user_outgoing_friend_requests and not user_friend and not user_followings %}
                         <form method="post" action="{% url 'representation:friend:requestFriendAdd'%}">
                             {% csrf_token %}
                             <input type="hidden" value="{{ user_profile.user.id }}" name="to_user">

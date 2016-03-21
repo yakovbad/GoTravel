@@ -32,7 +32,7 @@ class FriendBaseView(AllPageView):
 def request_add_friends(request):
     if request.method == 'POST':
         to_user = User.objects.get(id=int(request.POST['to_user']))
-        _fr = FriendRequest.objects.filter(from_user=to_user)
+        _fr = FriendRequest.objects.filter(from_user=to_user, accepted=False)
         if _fr.exists():
             _fr.first().accept(to_user)
         else:

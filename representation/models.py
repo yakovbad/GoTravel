@@ -78,8 +78,6 @@ class City(models.Model):
 
 
 class FriendRequest(models.Model):
-    class Meta:
-        unique_together = ['to_user', 'from_user']
 
     from_user = models.ForeignKey(User, related_name='user_outgoing_friend_requests', verbose_name=_(u'Requester'))
     to_user = models.ForeignKey(User, related_name='user_incoming_friend_requests', verbose_name=_(u'Receiver'))
