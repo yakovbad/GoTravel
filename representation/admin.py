@@ -1,10 +1,11 @@
 # coding: utf-8
 from django.contrib import admin
 
-from representation.models import Language, Country, City, UserProfile, FriendRequest
+from representation.models import Language, Country, City, UserProfile, FriendRequest, Message
 
 admin.site.register(Language)
 admin.site.register(City)
 admin.site.register(Country)
 admin.site.register(UserProfile)
 admin.site.register(FriendRequest)
+admin.site.register(Message)

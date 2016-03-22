@@ -90,8 +90,8 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="disabled">
-                                <span class="badge pull-right">99999</span>
+                            <a href="{% url 'representation:message:base' %}">
+                                <span class="badge pull-right">{{ not_read_message_count }}</span>
                                 Мои сообщения
                             </a>
                         </li>

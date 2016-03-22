@@ -1,0 +1,29 @@
+{% extends 'representation/base.html' %}
+
+{% block title %}
+Мои Сообщения
+{% endblock %}
+
+{% block content %}
+    <div class="col-md-9">
+        <div class="col-md-6">
+            <ul>
+                {% for message in messages %}
+                    <li>
+                        <a href="{% url 'representation:message:show' message.id %}">{{ message }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="col-md-6">
+            <ul>
+                {% for message in messages_out %}
+                    <li>
+                        <a href="">{{ message }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock %}
