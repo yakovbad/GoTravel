@@ -1,7 +1,10 @@
 # coding: utf-8
+from django.core.urlresolvers import reverse
+from django.views.generic import FormView
 from representation.models import Message
 from representation.views.views import AllPageView
 from .forms import SendMessage
+
 
 def url_view():
     from django.conf.urls import url, include
@@ -9,7 +12,6 @@ def url_view():
     urlpatterns = [
         url(r'^$', MessageBasePageView.as_view(), name='base'),
         url(r'^id(?P<message_id>\d+)$', MessageShowPageView.as_view(), name='show'),
-        # url(r'^send/$', None, name='send')
     ]
 
     return include(urlpatterns, namespace='message')
@@ -28,8 +30,9 @@ class MessageBasePageView(AllPageView):
         return context
 
 
-class MessageShowPageView(AllPageView):
-    http_method_names = ['get']
+class MessageShowPageView(FormView, AllPageView):
+    http_method_names = ['get', 'post']
+    form_class = SendMessage
     template_name = 'representation/message/show.html'
 
     def get_context_data(self, **kwargs):
@@ -40,6 +43,13 @@ class MessageShowPageView(AllPageView):
         message.save()
         context['message'] = message
 
-        context['form'] = SendMessage
+        context['form'] = self.form_class
 
         return context
+
+    def form_valid(self, form):
+        #todo added message to database
+        return super(MessageShowPageView, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse('representation:message:show', args=(self.kwargs['message_id'],))

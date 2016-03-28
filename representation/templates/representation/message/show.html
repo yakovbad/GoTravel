@@ -11,6 +11,7 @@
         <p>{{ message.text }}</p>
         <h2>Answer</h2>
         <form action="" method="post">
+            {% csrf_token %}
             {{ form.as_p }}
             <input type="submit">
         </form>
