@@ -15,8 +15,12 @@ def index(request):
 class AllPageView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(AllPageView, self).get_context_data(**kwargs)
-        count = self.request.user.user_incoming_friend_requests.filter(denied=False, accepted=False).count()
-        context['request_friend_count'] = count if count > 0 else ''
+
+        friend_count = self.request.user.user_incoming_friend_requests.filter(denied=False, accepted=False).count()
+        context['request_friend_count'] = friend_count if friend_count > 0 else ''
+
+        message_count = self.request.user.user_recipient_message.filter(read=False).count()
+        context['not_read_message_count'] = message_count if message_count > 0 else ''
         return context
 
 

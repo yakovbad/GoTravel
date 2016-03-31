@@ -1,6 +1,6 @@
 
 from django.conf.urls import url
-from representation.views import auth, views, profile, friend
+from representation.views import auth, views, profile, friend, message
 
 urlpatterns = [
     url(r'^test/', views.test, name='test'),
@@ -11,4 +11,5 @@ urlpatterns = [
 
     url(r'^profile/', profile.url_view()),
     url(r'^friends/', friend.url_view()),
+    url(r'^message/', message.url_view()),
 ]

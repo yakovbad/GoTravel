@@ -1,6 +1,8 @@
 # coding: utf-8
 import os
 import uuid
+
+from datetime import datetime
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -104,3 +106,15 @@ class FriendRequest(models.Model):
             return False
         self.denied = True
         self.save()
+
+
+class Message(models.Model):
+
+    user_sender = models.ForeignKey(User, related_name='user_sender_message')
+    user_recipient = models.ForeignKey(User, related_name='user_recipient_message')
+    text = models.TextField()
+    date = models.DateTimeField(default=datetime.now())
+    read = models.BooleanField(default=False)
+
+    def __unicode__(self):
+        return "%s to %s date=%s" % (self.user_sender, self.user_recipient, self.date)
