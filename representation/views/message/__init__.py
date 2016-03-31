@@ -24,8 +24,8 @@ class MessageBasePageView(AllPageView):
     def get_context_data(self, **kwargs):
         context = super(MessageBasePageView, self).get_context_data(**kwargs)
 
-        context['messages'] = self.request.user.user_recipient_message.all()
-        context['messages_out'] = self.request.user.user_sender_message.all()
+        context['messages'] = self.request.user.user_recipient_message.order_by("-date")
+        context['messages_out'] = self.request.user.user_sender_message.order_by("-date")
 
         return context
 
@@ -48,8 +48,11 @@ class MessageShowPageView(FormView, AllPageView):
         return context
 
     def form_valid(self, form):
-        #todo added message to database
+        user_recipient = Message.objects.get(id=int(self.kwargs['message_id'])).user_sender
+        Message(user_sender=self.request.user,
+                user_recipient=user_recipient,
+                text=form.cleaned_data['text']).save()
         return super(MessageShowPageView, self).form_valid(form)
 
     def get_success_url(self):
-        return reverse('representation:message:show', args=(self.kwargs['message_id'],))
+        return reverse('representation:message:base')
