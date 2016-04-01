@@ -1,4 +1,5 @@
 # coding: utf-8
+from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.views.generic import FormView
 from representation.models import Message
@@ -12,6 +13,7 @@ def url_view():
     urlpatterns = [
         url(r'^$', MessageBasePageView.as_view(), name='base'),
         url(r'^id(?P<message_id>\d+)$', MessageShowPageView.as_view(), name='show'),
+        url(r'^new/(?P<user_id>\d+)$', MessageShowPageView.as_view(), name='new')
     ]
 
     return include(urlpatterns, namespace='message')
@@ -38,17 +40,23 @@ class MessageShowPageView(FormView, AllPageView):
     def get_context_data(self, **kwargs):
         context = super(MessageShowPageView, self).get_context_data(**kwargs)
 
-        message = Message.objects.get(id=int(self.kwargs['message_id']))
-        message.read = True
-        message.save()
-        context['message'] = message
+        try:
+            message = Message.objects.get(id=int(self.kwargs['message_id']))
+            message.read = True
+            message.save()
+            context['message'] = message
+        except Exception:
+            pass
 
         context['form'] = self.form_class
 
         return context
 
     def form_valid(self, form):
-        user_recipient = Message.objects.get(id=int(self.kwargs['message_id'])).user_sender
+        try:
+            user_recipient = Message.objects.get(id=int(self.kwargs['message_id'])).user_sender
+        except KeyError:
+            user_recipient = User.objects.get(id=int(self.kwargs['user_id']))
         Message(user_sender=self.request.user,
                 user_recipient=user_recipient,
                 text=form.cleaned_data['text']).save()

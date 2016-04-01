@@ -3,7 +3,6 @@
 {% block title %}
 Главная страница
 {% endblock %}
-
 {% block content %}
         <div class="col-md-9" style="border: 1px solid red">
             <div class="row">
@@ -31,23 +30,41 @@
                             <input type="submit" value="Убрать из друзей">
                         </form>
                     {% endif %}
+                    {% if user_profile.user != request.user %}
+                        <a href="{% url 'representation:message:new' user_profile.user.id %}"><button>Отправить сообщение</button></a>
+                    {% endif %}
                 </div>
                 <div class="col-md-8" style="border: 1px solid green">
-                    <div>
-                        <h4>{{ user_profile.first_name }} {{ user_profile.name }}</h4>
-                        <p>Статус</p>
-                    </div>
-                    <div>
-                        <div class="">
-                            <div class="">День рождения: {{ user_profile.birthday }}</div>
-                            <div>Родной город: {{ user_profile.home_town }}</div>
-                            <div>Языки:
-                                {% for lang in user_profile.languages.all %}
-                                    {{ lang.name }}
-                                {% endfor %}
+                    <div style="border: 1px solid red">
+                        <div>
+                            <h4>{{ user_profile.first_name }} {{ user_profile.name }}</h4>
+                            <p>Статус</p>
+                        </div>
+                        <div>
+                            <div class="">
+                                <div class="">День рождения: {{ user_profile.birthday }}</div>
+                                <div>Родной город: {{ user_profile.home_town }}</div>
+                                <div>Языки:
+                                    {% for lang in user_profile.languages.all %}
+                                        {{ lang.name }}
+                                    {% endfor %}
 
+                                </div>
                             </div>
                         </div>
+                    </div>
+                    <div style="border: 1px solid blue; margin-top: 50px">
+                        All posts<br>
+                        {% for post, comments in post_with_comments.items%}
+                            {{ post }}
+                            <ul>
+                            {% for comment in comments %}
+                                <li>{{ comment }}</li>
+                            {% endfor %}
+                            </ul>
+                            <br>
+                        {% endfor %}
+
                     </div>
                 </div>
             </div>
