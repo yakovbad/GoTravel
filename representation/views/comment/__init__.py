@@ -33,6 +33,6 @@ def delete_comment(request, comment_id):
     if request.method == 'POST':
         c = Comment.objects.get(id=comment_id)
         post = c.post
-        if request.user == c.author or request.user == post.author:
+        if request.user == c.author or request.user == post.author or request.user == post.place:
             c.delete()
         return redirect(reverse('representation:post:all', args=(post.place.id,)))

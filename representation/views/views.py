@@ -45,10 +45,10 @@ class UserPageView(AllPageView):
         context['user_friend'] = self.request.user.friends.filter(user__id=user_id)
         context['user_followings'] = self.request.user.user_profile.get().followings.filter(id=user_id)
 
-        posts = Post.objects.filter(place__id=self.kwargs['user_id'])[:5]
+        posts = Post.objects.filter(place__id=self.kwargs['user_id']).order_by('-date')[:5]
         comments = {}
         for item in posts:
-            comments[item] = item.comment_post.all()
+            comments[item] = item.comment_post.order_by('-date')
         context['post_with_comments'] = comments
 
         return context

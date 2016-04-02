@@ -8,13 +8,22 @@
     <div class="col-md-9">
         {% for post, comments in post_with_comments.items %}
             {{ post }}
+            {% if request.user == post.author or request.user == post.place %}
+                        <form action="{% url 'representation:post:delete' user_id post.id %}" method="post">
+                            {% csrf_token %}
+                            <input type="submit" value="Удалить"/>
+                        </form>
+                    {% endif %}
             <ul>
             {% for comment in comments %}
                 <li>{{ comment }}
-                    <form action="{% url 'representation:comment:delete' comment.id %}" method="post">
-                        {% csrf_token %}
-                        <input type="submit" value="Удалить"/>
-                    </form>
+                    {% if request.user == comment.author or request.user == post.author or request.user == post.place %}
+                        <form action="{% url 'representation:comment:delete' comment.id %}" method="post">
+                            {% csrf_token %}
+                            <input type="submit" value="Удалить"/>
+                        </form>
+                    {% endif %}
+
                 </li>
             {% endfor %}
             </ul>

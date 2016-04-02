@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
+from django.shortcuts import redirect
 from django.views.generic import FormView
 
 from representation.models import Post
@@ -14,6 +15,7 @@ def url_view():
     urlpatterns = [
         url(r'^$', PostBasePageView.as_view(), name='all'),
         url(r'^add/', PostAddView.as_view(), name='add'),
+        url(r'^delete/(?P<post_id>\d+)', delete_post, name='delete'),
     ]
     return include(urlpatterns, namespace='post')
 
@@ -33,7 +35,7 @@ class PostBasePageView(AllPageView):
         posts = Post.objects.filter(place__id=context['user_id'])
         comments = {}
         for item in posts:
-            comments[item] = item.comment_post.all()
+            comments[item] = item.comment_post.order_by('-date')
         context['post_with_comments'] = comments
         return context
 
@@ -50,3 +52,11 @@ class PostAddView(FormView):
 
     def get_success_url(self):
         return reverse('representation:post:all', args=(self.kwargs['user_id'],))
+
+
+def delete_post(request, user_id, post_id):
+    if request.method == 'POST':
+        post = Post.objects.get(id=post_id)
+        if request.user == post.author or request.user == post.place:
+            post.delete()
+        return redirect(reverse('representation:post:all', args=(user_id,)))

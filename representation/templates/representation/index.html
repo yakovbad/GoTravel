@@ -54,7 +54,7 @@
                         </div>
                     </div>
                     <div style="border: 1px solid blue; margin-top: 50px">
-                        All posts<br>
+                        <a href="{% url 'representation:post:all' user_profile.user.id %}">All posts</a><br>
                         {% for post, comments in post_with_comments.items%}
                             {{ post }}
                             <ul>
