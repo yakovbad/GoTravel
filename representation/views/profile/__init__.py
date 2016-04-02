@@ -20,7 +20,7 @@ def url_view():
 
 class BaseProfileFormView(UpdateView):
     model = UserProfile
-    template_name = 'representation/profile_base.html'
+    template_name = 'representation/profile/base.html'
 
     def get_object(self, queryset=None):
         return self.model.objects.get_or_create(user=self.request.user)[0]
@@ -39,7 +39,7 @@ class ProfileFormView(BaseProfileFormView):
 
 class ContactFormView(BaseProfileFormView):
     form_class = AddOrEditContact
-    template_name = 'representation/profile_contact.html'
+    template_name = 'representation/profile/contact.html'
     success_url = reverse_lazy('representation:profile:contact')
 
 
@@ -50,6 +50,6 @@ class UserPersonalFormView(BaseProfileFormView):
 
 class UserPhotoFormView(BaseProfileFormView):
     form_class = AddOrEditUserAvatarPhoto
-    template_name = 'representation/profile_photo.html'
+    template_name = 'representation/profile/photo.html'
     success_url = reverse_lazy('representation:profile:photo')
 

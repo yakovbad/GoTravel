@@ -5,7 +5,7 @@ from django.views.generic import FormView
 
 from representation.models import Post
 from representation.views.comment import AddCommentToPostForm
-from representation.views.posts.forms import AddPostForm
+from representation.views.post.forms import AddPostForm
 from representation.views.views import AllPageView
 
 
