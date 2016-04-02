@@ -1,6 +1,6 @@
 
 from django.conf.urls import url
-from representation.views import auth, views, profile, friend, message, post,comment
+from representation.views import auth, views, profile, friend, message, post, comment
 
 urlpatterns = [
     url(r'^test/', views.test, name='test'),
