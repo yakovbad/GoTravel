@@ -1,0 +1,44 @@
+{% extends 'representation/base.html' %}
+
+{% block title %}
+    Стена пользователя
+{% endblock %}
+
+{% block content %}
+    <div class="col-md-9">
+        {% for post, comments in post_with_comments.items %}
+            {{ post }}
+            {% if request.user == post.author or request.user == post.place %}
+                        <form action="{% url 'representation:post:delete' user_id post.id %}" method="post">
+                            {% csrf_token %}
+                            <input type="submit" value="Удалить"/>
+                        </form>
+                    {% endif %}
+            <ul>
+            {% for comment in comments %}
+                <li>{{ comment }}
+                    {% if request.user == comment.author or request.user == post.author or request.user == post.place %}
+                        <form action="{% url 'representation:comment:delete' comment.id %}" method="post">
+                            {% csrf_token %}
+                            <input type="submit" value="Удалить"/>
+                        </form>
+                    {% endif %}
+
+                </li>
+            {% endfor %}
+            </ul>
+            <form method="post" action="{% url 'representation:comment:addToPost' user_id post.id%}">
+                {% csrf_token %}
+                {{ form_comment.as_p }}
+                <input type="submit" value="Коммент"/>
+            </form>
+            <br>
+        {% endfor %}
+        <h3>New Post</h3>
+        <form method="post" action="{% url 'representation:post:add' user_id %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Опубликовать"/>
+        </form>
+    </div>
+{% endblock %}

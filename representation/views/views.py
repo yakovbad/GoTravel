@@ -3,7 +3,7 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 
-from representation.models import UserProfile
+from representation.models import UserProfile, Post
 
 
 def index(request):
@@ -44,6 +44,12 @@ class UserPageView(AllPageView):
             .filter(to_user__id=user_id).filter(denied=False, accepted=False)
         context['user_friend'] = self.request.user.friends.filter(user__id=user_id)
         context['user_followings'] = self.request.user.user_profile.get().followings.filter(id=user_id)
+
+        posts = Post.objects.filter(place__id=self.kwargs['user_id']).order_by('-date')[:5]
+        comments = {}
+        for item in posts:
+            comments[item] = item.comment_post.order_by('-date')
+        context['post_with_comments'] = comments
 
         return context
 
