@@ -118,3 +118,24 @@ class Message(models.Model):
 
     def __unicode__(self):
         return "%s to %s date=%s" % (self.user_sender, self.user_recipient, self.date)
+
+
+class Comment(models.Model):
+    author = models.ForeignKey(User, related_name="author_comment")
+    date = models.DateTimeField(default=datetime.now())
+    text = models.TextField()
+    post = models.ForeignKey('Post', related_name="comment_post", blank=True, null=True)
+
+    def __unicode__(self):
+        return "%s" % (self.text[:50])
+
+
+class Post(models.Model):
+
+    author = models.ForeignKey(User, related_name='author_post')
+    place = models.ForeignKey(User, related_name='place_post')
+    date = models.DateTimeField(default=datetime.now())
+    text = models.TextField()
+
+    def __unicode__(self):
+        return "%s" % (self.text[:50])
