@@ -120,7 +120,7 @@ class Message(models.Model):
         return "%s to %s date=%s" % (self.user_sender, self.user_recipient, self.date)
 
 
-class Comment(models.Model):
+class PostComment(models.Model):
     author = models.ForeignKey(User, related_name="author_comment")
     date = models.DateTimeField(default=datetime.now())
     text = models.TextField()
