@@ -2,7 +2,7 @@
 import os
 import uuid
 
-from datetime import datetime
+from django.utils import timezone
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -113,7 +113,7 @@ class Message(models.Model):
     user_sender = models.ForeignKey(User, related_name='user_sender_message')
     user_recipient = models.ForeignKey(User, related_name='user_recipient_message')
     text = models.TextField()
-    date = models.DateTimeField(default=datetime.now())
+    date = models.DateTimeField(default=timezone.now)
     read = models.BooleanField(default=False)
 
     def __unicode__(self):
@@ -122,7 +122,7 @@ class Message(models.Model):
 
 class PostComment(models.Model):
     author = models.ForeignKey(User, related_name="author_comment")
-    date = models.DateTimeField(default=datetime.now())
+    date = models.DateTimeField(default=timezone.now)
     text = models.TextField()
     post = models.ForeignKey('Post', related_name="comment_post", blank=True, null=True)
 
@@ -134,7 +134,7 @@ class Post(models.Model):
 
     author = models.ForeignKey(User, related_name='author_post')
     place = models.ForeignKey(User, related_name='place_post')
-    date = models.DateTimeField(default=datetime.now())
+    date = models.DateTimeField(default=timezone.now)
     text = models.TextField()
 
     def __unicode__(self):
