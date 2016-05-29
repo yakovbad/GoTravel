@@ -10,8 +10,8 @@
                 <div class="col-md-4">
 
                     <img src="
-                    {%  if user_profile.user_photo_avatar %}
-                        {{ user_profile.user_photo_avatar.url }}
+                    {%  if user_profile.user_photo_avatar != None %}
+                        {{ user_profile.user_photo_avatar.img.url }}
                     {% else %}
                         /media/users/avatar/default/default.jpg
                     {% endif %}

@@ -1,0 +1,26 @@
+{% extends 'representation/base.html' %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block content %}
+    <div class="col-md-9">
+        <a href="{% url 'album:album:edit' request.user.id photos.0.album.id %}">Edit album</a>
+        <div class="row">
+            {% for photo in photos %}
+                <div class="col-xs-6 col-md-3">
+                  <img src="{{ photo.img.url }}" alt="..." class="photo">
+              </div>
+            {% endfor %}
+
+        </div>
+    </div>
+
+    <style>
+        .photo{
+            height: 250px;
+            width: 250px;
+        }
+    </style>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'representation/base.html' %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block content %}
+    <div class="col-md-9">
+        <div class="row">
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input type="submit" value="Save">
+            </form>
+        </div>
+    </div>
+{% endblock %}

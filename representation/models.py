@@ -7,6 +7,8 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
+from album.models import Photo
+
 genders = (
     ("m", "Male"),
     ("fm", "Female"),
@@ -43,8 +45,7 @@ class UserProfile(models.Model):
     favorite_books = models.TextField(blank=True)
     favorite_games = models.TextField(blank=True)
 
-    #todo переделать когда добавлю фото пользователя
-    user_photo_avatar = models.ImageField(blank=True, upload_to=get_path_user_photo)
+    user_photo_avatar = models.ForeignKey(Photo, blank=True, null=True)
 
     friends = models.ManyToManyField(User, related_name='friends', blank=True)
     followers = models.ManyToManyField(User, related_name='follower', blank=True)
