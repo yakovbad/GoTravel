@@ -1,4 +1,4 @@
-from django.core.urlresolvers import reverse_lazy
+from django.core.urlresolvers import reverse_lazy, reverse
 from django.views.generic import CreateView
 
 from album.views.photo.forms import UploadPhotoForm
@@ -18,4 +18,6 @@ class PhotoUploadView(CreateView):
     template_name = "album/upload_photo.html"
     form_class = UploadPhotoForm
     http_method_names = ['get', 'post']
-    success_url = reverse_lazy('album:album:root')
+
+    def get_success_url(self):
+        return reverse('album:album:root', args=(self.request.user.id,))
