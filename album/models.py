@@ -17,7 +17,7 @@ def get_path_user_album(instance, filename):
 
 class Album(models.Model):
     name = models.CharField(max_length=50)
-    owner = models.ForeignKey(User)
+    owner = models.ForeignKey(User, null=True, blank=True)
     is_private = models.BooleanField(default=False)
     create_date = models.DateTimeField(default=timezone.now)
     cover = models.ForeignKey('Photo', related_name='cover', null=True, blank=True)

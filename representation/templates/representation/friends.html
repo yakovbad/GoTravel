@@ -29,7 +29,7 @@
                 <ul>
                     {% for friend in user_profile.friends.all %}
                         <li>
-                            <a href="{% url 'representation:userPage' friend.id %}">{{ friend.user_profile.get.get_full_name }}</a>
+                            <a href="{% url 'representation:userPage' friend.id %}">{{ friend.user_profile.get_full_name }}</a>
                         </li>
                     {% endfor %}
                 </ul>
@@ -39,7 +39,7 @@
                 <ul>
                     {% for follower in user_profile.followers.all %}
                         <li>
-                            <a href="{% url 'representation:userPage' follower.id %}">{{ follower.user_profile.get.get_full_name }}</a>
+                            <a href="{% url 'representation:userPage' follower.id %}">{{ follower.user_profile.get_full_name }}</a>
                         </li>
                     {% endfor %}
                 </ul>
@@ -49,7 +49,7 @@
                 <ul>
                     {% for following in user_profile.followings.all %}
                         <li>
-                            <a href="{% url 'representation:userPage' following.id %}">{{ following.user_profile.get.get_full_name }}</a>
+                            <a href="{% url 'representation:userPage' following.id %}">{{ following.user_profile.get_full_name }}</a>
                         </li>
                     {% endfor %}
                 </ul>

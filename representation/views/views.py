@@ -43,7 +43,7 @@ class UserPageView(AllPageView):
         context['user_outgoing_friend_requests'] = self.request.user.user_outgoing_friend_requests\
             .filter(to_user__id=user_id).filter(denied=False, accepted=False)
         context['user_friend'] = self.request.user.friends.filter(user__id=user_id)
-        context['user_followings'] = self.request.user.user_profile.get().followings.filter(id=user_id)
+        context['user_followings'] = self.request.user.user_profile.followings.filter(id=user_id)
 
         posts = Post.objects.filter(place__id=self.kwargs['user_id']).order_by('-date')[:5]
         comments = {}

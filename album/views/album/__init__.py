@@ -64,6 +64,11 @@ class AlbumEditView(UpdateView):
     def get_object(self, queryset=None):
         return self.model.objects.get(id=self.kwargs['album_id'])
 
+    def get_context_data(self, **kwargs):
+        context = super(AlbumEditView, self).get_context_data(**kwargs)
+        context['album_id'] = self.kwargs['album_id']
+        return context
+
     def get(self, request, *args, **kwargs):
         if request.user != self.get_object().owner:
             raise PermissionDenied

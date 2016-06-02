@@ -3,7 +3,10 @@
 <head>
 	<title>{% block title %} {% endblock %}</title>
 	<link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'gotravel/css/style.css' %}" rel="stylesheet">
 	<script src={% static 'dependencies/jquery-2.2.4.min.js' %}></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+    <script src="{% static 'gotravel/js/config.js' %}"></script>
 </head>
 <body>
 	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -75,19 +78,8 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="disabled">
-                                <span class="badge pull-right">3</span>
-                                Мои отзывы
-                            </a>
-                        </li>
-                        <li>
                             <a href="{% url 'album:album:root' request.user.id %}">
                                 Мои фотографии
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="disabled">
-                                Мои видео
                             </a>
                         </li>
                         <li>
@@ -95,19 +87,6 @@
                                 <span class="badge pull-right">{{ not_read_message_count }}</span>
                                 Мои сообщения
                             </a>
-                        </li>
-                        <li>
-                            <a href="#" class="disabled">
-                                Мои новости
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="disabled">
-                                Мои баллы
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="disabled">Мои настройки</a>
                         </li>
                     </ul>
                 </div>

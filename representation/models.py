@@ -22,8 +22,13 @@ def get_path_user_photo(instance, filename):
     return os.path.join(path, str(instance.user.id), filename)
 
 
+class UserProfileManager(models.Manager):
+    def get_by_natural_key(self):
+        return self.get()
+
+
 class UserProfile(models.Model):
-    user = models.ForeignKey(User, related_name='user_profile')
+    user = models.OneToOneField(User, related_name='user_profile')
     name = models.CharField(max_length=50, blank=True)
     first_name = models.CharField(max_length=50, blank=True)
     sex = models.CharField(max_length=2, choices=genders, blank=True)
@@ -51,11 +56,19 @@ class UserProfile(models.Model):
     followers = models.ManyToManyField(User, related_name='follower', blank=True)
     followings = models.ManyToManyField(User, related_name='following', blank=True)
 
+    objects = UserProfileManager()
+
     def __unicode__(self):
         return "%s: %s %s" % (self.user.username, self.name, self.first_name)
 
     def get_full_name(self):
         return "%s %s" % (self.name, self.first_name)
+
+    def natural_key(self):
+        if self.user_photo_avatar is not None:
+            return (self.get_full_name(), self.user_photo_avatar.img.url)
+        else:
+            return (self.get_full_name(),)
 
 
 class Language(models.Model):
@@ -81,7 +94,6 @@ class City(models.Model):
 
 
 class FriendRequest(models.Model):
-
     from_user = models.ForeignKey(User, related_name='user_outgoing_friend_requests', verbose_name=_(u'Requester'))
     to_user = models.ForeignKey(User, related_name='user_incoming_friend_requests', verbose_name=_(u'Receiver'))
     message = models.TextField(null=True, blank=True, verbose_name=_(u'Message'))
@@ -110,7 +122,6 @@ class FriendRequest(models.Model):
 
 
 class Message(models.Model):
-
     user_sender = models.ForeignKey(User, related_name='user_sender_message')
     user_recipient = models.ForeignKey(User, related_name='user_recipient_message')
     text = models.TextField()
@@ -122,7 +133,7 @@ class Message(models.Model):
 
 
 class PostComment(models.Model):
-    author = models.ForeignKey(User, related_name="author_comment")
+    author = models.ForeignKey(UserProfile, related_name="author_comment")
     date = models.DateTimeField(default=timezone.now)
     text = models.TextField()
     post = models.ForeignKey('Post', related_name="comment_post", blank=True, null=True)
@@ -132,9 +143,8 @@ class PostComment(models.Model):
 
 
 class Post(models.Model):
-
-    author = models.ForeignKey(User, related_name='author_post')
-    place = models.ForeignKey(User, related_name='place_post')
+    author = models.ForeignKey(UserProfile, related_name='author_post')
+    place = models.ForeignKey(UserProfile, related_name='place_post')
     date = models.DateTimeField(default=timezone.now)
     text = models.TextField()
 

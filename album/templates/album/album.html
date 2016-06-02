@@ -6,7 +6,8 @@
 
 {% block content %}
     <div class="col-md-9">
-        <a href="{% url 'album:album:edit' request.user.id photos.0.album.id %}">Edit album</a>
+        <a href="{% url 'album:album:edit' request.user.id album_id %}">Edit album</a>
+        <a href="{% url 'album:photo:root' request.user.id %}">Add new photo</a>
         <div class="row">
             {% for photo in photos %}
                 <div class="col-xs-6 col-md-3">
