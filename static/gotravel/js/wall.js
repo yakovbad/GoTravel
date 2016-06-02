@@ -30,11 +30,11 @@ function addPostToWall() {
 }
 
 function postToHtml(post) {
-    post = post.fields;
+    post_fields = post.fields;
     var src = "/media/users/avatar/default/default.jpg";
-    if (post.author[1] !== undefined)
+    if (post_fields.author[2] !== undefined)
     {
-         src = post.author[1]
+         src = post_fields.author[2]
     }
 
     result = '<div class="post row">'+
@@ -43,10 +43,10 @@ function postToHtml(post) {
 
         '</div>'+
         '<div class="col-md-10">'+
-            '<small>'+ post.author[0]+'</small>'+
-            '<p>'+ post.text +'</p>'+
-            '<small>'+ new Date(post.date).toLocaleString()+'</small>  '+
-            '<a name="show-comment-form">Комментировать</a>'+
+            '<small>'+ post_fields.author[1]+'</small>'+
+            '<p>'+ post_fields.text +'</p>'+
+            '<small>'+ new Date(post_fields.date).toLocaleString()+'</small>  '+
+            '<a name="show-comment-form" href="/wall'+post_fields.place[0]+'">Комментировать</a>'+
         '</div>'+
     '</div>';
     return result;

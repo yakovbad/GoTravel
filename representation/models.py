@@ -66,9 +66,9 @@ class UserProfile(models.Model):
 
     def natural_key(self):
         if self.user_photo_avatar is not None:
-            return (self.get_full_name(), self.user_photo_avatar.img.url)
+            return (self.pk, self.get_full_name(), self.user_photo_avatar.img.url)
         else:
-            return (self.get_full_name(),)
+            return (self.pk, self.get_full_name(),)
 
 
 class Language(models.Model):

@@ -5,9 +5,9 @@
 Главная страница
 {% endblock %}
 {% block content %}
-        <div class="col-md-9" style="border: 1px solid red">
+        <div class="col-md-9">
             <div class="row">
-                <div style="border: 1px solid red">{{ user_profile.name }} {{ user_profile.first_name }}</div>
+                <div>{{ user_profile.name }} {{ user_profile.first_name }}</div>
                 <div class="col-md-4">
 
                     <img src="
@@ -35,8 +35,8 @@
                         <a href="{% url 'representation:message:new' user_profile.user.id %}"><button>Отправить сообщение</button></a>
                     {% endif %}
                 </div>
-                <div class="col-md-8" style="border: 1px solid green">
-                    <div style="border: 1px solid red">
+                <div class="col-md-8">
+                    <div>
                         <div>
                             <h4>{{ user_profile.first_name }} {{ user_profile.name }}</h4>
                             <p>Статус</p>

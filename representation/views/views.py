@@ -1,4 +1,4 @@
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
@@ -38,18 +38,12 @@ class UserPageView(AllPageView):
             try:
                 context['user_profile'] = UserProfile.objects.get(user__id=user_id)
             except ObjectDoesNotExist:
-                return render(self.request, '')
+                raise PermissionDenied
 
         context['user_outgoing_friend_requests'] = self.request.user.user_outgoing_friend_requests\
             .filter(to_user__id=user_id).filter(denied=False, accepted=False)
         context['user_friend'] = self.request.user.friends.filter(user__id=user_id)
         context['user_followings'] = self.request.user.user_profile.followings.filter(id=user_id)
-
-        posts = Post.objects.filter(place__id=self.kwargs['user_id']).order_by('-date')[:5]
-        comments = {}
-        for item in posts:
-            comments[item] = item.comment_post.order_by('-date')
-        context['post_with_comments'] = comments
 
         return context
 
