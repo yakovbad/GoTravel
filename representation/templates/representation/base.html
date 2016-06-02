@@ -64,7 +64,7 @@
                 </div>
             </div>
         {% else %}
-            <div class="col-md-3 content">
+            <div class="col-md-3">
                 <ul class="nav nav-pills nav-stacked">
                     <li>
                         <ul class="nav nav-pills" role="tablist">
@@ -93,8 +93,10 @@
                     </li>
                 </ul>
             </div>
+            <div class="content">
             {% block content %}
             {% endblock %}
+            </div>
         {% endif %}
     </div>
 </div>

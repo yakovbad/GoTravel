@@ -29,6 +29,8 @@ class UserPageView(AllPageView):
     template_name = 'representation/index.html'
 
     def get_context_data(self, **kwargs):
+        if not self.request.user.is_authenticated():
+            raise PermissionDenied
         context = super(UserPageView, self).get_context_data(**kwargs)
         user_id = int(self.kwargs['user_id'])
 
