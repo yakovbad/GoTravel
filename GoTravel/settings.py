@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+from ast import literal_eval
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -23,7 +24,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = ')dol^qfmb*zo78j^3dgmk416_2r1a#w=%5d(zvf5*eism+gptk'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = bool(literal_eval(os.environ.get("GT_DEBUG", "True")))
+LOCAL = bool(literal_eval(os.environ.get("GT_LOCAL", "True")))
+PROD = bool(literal_eval(os.environ.get("GT_PROD", "False")))
 
 ALLOWED_HOSTS = []
 
@@ -77,13 +80,24 @@ WSGI_APPLICATION = 'GoTravel.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+if LOCAL:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
     }
-}
+elif PROD:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',  # django.db.backends.postgresql_psycopg2
+            'NAME': os.environ["GT_DB_DEFAULT_NAME"],
+            'USER': os.environ["GT_DB_DEFAULT_USER"],
+            'PASSWORD': os.environ["GT_DB_DEFAULT_PASSWORD"],
+            'HOST': os.environ["GT_DB_DEFAULT_HOST"],
+            'PORT': os.environ["GT_DB_DEFAULT_PORT"],
+        }
+    }
 
 
 # Internationalization
