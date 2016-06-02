@@ -1,0 +1,23 @@
+{% extends 'representation/base.html' %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block content %}
+    <div class="col-md-9">
+    <a href="{% url 'album:album:create' request.user.id %}">Create new album</a>
+    {% for album in albums %}
+        <div class="row">
+          <div class="col-sm-6 col-md-4">
+            <div class="thumbnail">
+                <img src="{{ album.cover.img.url }}" alt = "Тут будет обложка">
+                <div class="caption">
+                    <a href="{% url 'album:album:all_photos_in_album' album.owner.id album.id %}"><h3>{{ album.name }}</h3></a>
+                </div>
+            </div>
+          </div>
+        </div>
+    {% endfor %}
+    </div>
+{% endblock %}

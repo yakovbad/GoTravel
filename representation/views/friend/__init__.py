@@ -37,8 +37,8 @@ def request_add_friends(request):
             _fr.first().accept(to_user)
         else:
             FriendRequest(from_user=request.user, to_user=to_user).save()
-            request.user.user_profile.get().followings.add(to_user)
-            to_user.user_profile.get().followers.add(request.user)
+            request.user.user_profile.followings.add(to_user)
+            to_user.user_profile.followers.add(request.user)
         return redirect(reverse('representation:userPage', args=(to_user.id,)))
 
 

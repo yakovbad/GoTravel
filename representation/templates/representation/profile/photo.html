@@ -1,7 +1,8 @@
 {% extends 'representation/profile/base.html' %}
 
 {% block content_local %}
-    <form method="post" enctype="multipart/form-data">
+    <a href="{% url 'album:photo:root' request.user.id %}">Upload new photo</a>
+    <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
         <input type="submit" class="button" value="Сохранить">

@@ -1,12 +1,12 @@
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm
 
-from representation.models import Comment
+from representation.models import PostComment
 
 
 class AddCommentToPostForm(ModelForm):
     class Meta:
-        model = Comment
+        model = PostComment
         fields = ['text']
 
     def clean_text(self):

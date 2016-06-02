@@ -2,10 +2,12 @@
 import os
 import uuid
 
-from datetime import datetime
+from django.utils import timezone
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+
+from album.models import Photo
 
 genders = (
     ("m", "Male"),
@@ -20,8 +22,13 @@ def get_path_user_photo(instance, filename):
     return os.path.join(path, str(instance.user.id), filename)
 
 
+class UserProfileManager(models.Manager):
+    def get_by_natural_key(self):
+        return self.get()
+
+
 class UserProfile(models.Model):
-    user = models.ForeignKey(User, related_name='user_profile')
+    user = models.OneToOneField(User, related_name='user_profile')
     name = models.CharField(max_length=50, blank=True)
     first_name = models.CharField(max_length=50, blank=True)
     sex = models.CharField(max_length=2, choices=genders, blank=True)
@@ -43,18 +50,25 @@ class UserProfile(models.Model):
     favorite_books = models.TextField(blank=True)
     favorite_games = models.TextField(blank=True)
 
-    #todo переделать когда добавлю фото пользователя
-    user_photo_avatar = models.ImageField(blank=True, upload_to=get_path_user_photo)
+    user_photo_avatar = models.ForeignKey(Photo, blank=True, null=True)
 
     friends = models.ManyToManyField(User, related_name='friends', blank=True)
     followers = models.ManyToManyField(User, related_name='follower', blank=True)
     followings = models.ManyToManyField(User, related_name='following', blank=True)
+
+    objects = UserProfileManager()
 
     def __unicode__(self):
         return "%s: %s %s" % (self.user.username, self.name, self.first_name)
 
     def get_full_name(self):
         return "%s %s" % (self.name, self.first_name)
+
+    def natural_key(self):
+        if self.user_photo_avatar is not None:
+            return (self.get_full_name(), self.user_photo_avatar.img.url)
+        else:
+            return (self.get_full_name(),)
 
 
 class Language(models.Model):
@@ -80,7 +94,6 @@ class City(models.Model):
 
 
 class FriendRequest(models.Model):
-
     from_user = models.ForeignKey(User, related_name='user_outgoing_friend_requests', verbose_name=_(u'Requester'))
     to_user = models.ForeignKey(User, related_name='user_incoming_friend_requests', verbose_name=_(u'Receiver'))
     message = models.TextField(null=True, blank=True, verbose_name=_(u'Message'))
@@ -109,20 +122,19 @@ class FriendRequest(models.Model):
 
 
 class Message(models.Model):
-
     user_sender = models.ForeignKey(User, related_name='user_sender_message')
     user_recipient = models.ForeignKey(User, related_name='user_recipient_message')
     text = models.TextField()
-    date = models.DateTimeField(default=datetime.now())
+    date = models.DateTimeField(default=timezone.now)
     read = models.BooleanField(default=False)
 
     def __unicode__(self):
         return "%s to %s date=%s" % (self.user_sender, self.user_recipient, self.date)
 
 
-class Comment(models.Model):
-    author = models.ForeignKey(User, related_name="author_comment")
-    date = models.DateTimeField(default=datetime.now())
+class PostComment(models.Model):
+    author = models.ForeignKey(UserProfile, related_name="author_comment")
+    date = models.DateTimeField(default=timezone.now)
     text = models.TextField()
     post = models.ForeignKey('Post', related_name="comment_post", blank=True, null=True)
 
@@ -131,10 +143,9 @@ class Comment(models.Model):
 
 
 class Post(models.Model):
-
-    author = models.ForeignKey(User, related_name='author_post')
-    place = models.ForeignKey(User, related_name='place_post')
-    date = models.DateTimeField(default=datetime.now())
+    author = models.ForeignKey(UserProfile, related_name='author_post')
+    place = models.ForeignKey(UserProfile, related_name='place_post')
+    date = models.DateTimeField(default=timezone.now)
     text = models.TextField()
 
     def __unicode__(self):

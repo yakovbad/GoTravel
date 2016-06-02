@@ -12,9 +12,10 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+from ast import literal_eval
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
@@ -23,7 +24,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = ')dol^qfmb*zo78j^3dgmk416_2r1a#w=%5d(zvf5*eism+gptk'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = bool(literal_eval(os.environ.get("GT_DEBUG", "True")))
+LOCAL = bool(literal_eval(os.environ.get("GT_LOCAL", "True")))
+PROD = bool(literal_eval(os.environ.get("GT_PROD", "False")))
 
 ALLOWED_HOSTS = []
 
@@ -37,7 +40,10 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'representation'
+
+
+    'representation',
+    'album',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -74,13 +80,25 @@ WSGI_APPLICATION = 'GoTravel.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+if LOCAL:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
     }
-}
+elif PROD:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',  # django.db.backends.postgresql_psycopg2
+            'NAME': os.environ["GT_DB_DEFAULT_NAME"],
+            'USER': os.environ["GT_DB_DEFAULT_USER"],
+            'PASSWORD': os.environ["GT_DB_DEFAULT_PASSWORD"],
+            'HOST': os.environ["GT_DB_DEFAULT_HOST"],
+            'PORT': os.environ["GT_DB_DEFAULT_PORT"],
+        }
+    }
+    STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 
 # Internationalization
@@ -100,8 +118,16 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
+
+
+if LOCAL:
+    STATICFILES_DIRS = ([os.path.join(BASE_DIR, "static")])
+elif PROD:
+    STATIC_ROOT = os.path.join(PROJECT_ROOT, '../staticfiles')
+    STATICFILES_DIRS = (
+        os.path.join(PROJECT_ROOT, '../static'),
+    )
 STATIC_URL = '/static/'
-# STATICFILES_DIRS = ([os.path.join(BASE_DIR, "static")])
 
 AUTH_USER_MODEL = 'auth.User'
 

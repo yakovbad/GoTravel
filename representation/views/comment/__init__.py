@@ -2,7 +2,7 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import redirect
 from django.views.generic import FormView
 
-from representation.models import Comment, Post
+from representation.models import PostComment, Post
 from representation.views.comment.forms import AddCommentToPostForm
 
 
@@ -22,7 +22,7 @@ class CommentAddToPostView(FormView):
 
     def form_valid(self, form):
         post = Post.objects.get(id=self.kwargs['post_id'])
-        Comment(author=self.request.user, post=post, text=form.cleaned_data['text']).save()
+        PostComment(author=self.request.user, post=post, text=form.cleaned_data['text']).save()
         return super(CommentAddToPostView, self).form_valid(form)
 
     def get_success_url(self):
@@ -31,7 +31,7 @@ class CommentAddToPostView(FormView):
 
 def delete_comment(request, comment_id):
     if request.method == 'POST':
-        c = Comment.objects.get(id=comment_id)
+        c = PostComment.objects.get(id=comment_id)
         post = c.post
         if request.user == c.author or request.user == post.author or request.user == post.place:
             c.delete()

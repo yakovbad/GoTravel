@@ -1,8 +1,7 @@
 # coding: utf-8
 from django.contrib import admin
 
-from representation.models import Language, Country, City, UserProfile, FriendRequest, Message, Comment, Post
-
+from representation.models import Language, Country, City, UserProfile, FriendRequest, Message, PostComment, Post
 
 @admin.register(Language)
 class LanguageAdmin(admin.ModelAdmin):
@@ -47,7 +46,7 @@ class MessageAdmin(admin.ModelAdmin):
     pass
 
 
-@admin.register(Comment)
+@admin.register(PostComment)
 class CommentAdmin(admin.ModelAdmin):
     pass
 

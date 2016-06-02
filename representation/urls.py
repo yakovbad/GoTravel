@@ -1,6 +1,7 @@
 
 from django.conf.urls import url
 from representation.views import auth, views, profile, friend, message, post, comment
+from representation.views.api import v1
 
 urlpatterns = [
     url(r'^test/', views.test, name='test'),
@@ -14,4 +15,6 @@ urlpatterns = [
     url(r'^message/', message.url_view()),
     url(r'^wall(?P<user_id>\d+)/', post.url_view()),
     url(r'^comment/', comment.url_view()),
+
+    url(r'^api/v1/', v1.url_view()),
 ]
