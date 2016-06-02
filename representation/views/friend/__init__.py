@@ -24,6 +24,17 @@ class FriendBaseView(AllPageView):
 
     def get_context_data(self, **kwargs):
         context = super(FriendBaseView, self).get_context_data(**kwargs)
+        if 'search' in self.request.GET and self.request.GET['search'] is not "":
+            search = self.request.GET['search']
+            context['search'] = search
+            result = []
+            _result = []
+            for item in ['name', 'first_name']:
+                a = '%s__icontains' % item
+                _result.append(UserProfile.objects.filter(**{a: search}))
+            for item in _result:
+                result += item
+            context['result'] = set(result)
         context['user_profile'] = UserProfile.objects.get(user=self.request.user)
         context['request_friend'] = self.request.user.user_incoming_friend_requests.filter(denied=False, accepted=False)
         return context
