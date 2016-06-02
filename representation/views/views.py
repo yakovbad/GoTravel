@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect
@@ -12,7 +13,7 @@ def index(request):
     return render(request, 'representation/index.html')
 
 
-class AllPageView(TemplateView):
+class AllPageView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super(AllPageView, self).get_context_data(**kwargs)
 

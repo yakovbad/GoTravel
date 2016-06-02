@@ -1,4 +1,5 @@
 # coding: utf-8
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic import UpdateView
 from .forms import AddOrEditProfile, AddOrEditContact, AddOrEditPersonalInfo, AddOrEditUserAvatarPhoto
@@ -18,7 +19,7 @@ def url_view():
     return include(urlpatterns, namespace='profile')
 
 
-class BaseProfileFormView(UpdateView):
+class BaseProfileFormView(LoginRequiredMixin, UpdateView):
     model = UserProfile
     template_name = 'representation/profile/base.html'
 
